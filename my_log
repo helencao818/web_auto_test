@@ -1,0 +1,42 @@
+import logging
+import datetime
+from study_0103.tools.get_path import test_log_path
+import os
+class MyLog:
+    now_time = datetime.datetime.now()
+    file_name='test_log{}.txt'.format(now_time.strftime('%Y-%m-%d_%H_%M_%S'))
+    def my_log(self,level,msg):
+        log_path=os.path.join(test_log_path,self.file_name)
+        my_logger=logging.getLogger(self.file_name)
+        my_logger.setLevel("DEBUG")#设置
+        formatter = logging.Formatter('%(asctime)s-%(levelname)s-日志信息:%(message)s')
+        fh=logging.FileHandler(log_path,encoding='UTF-8')#输出到指定文件
+        fh.setLevel("DEBUG")#设置输出级别  大写
+        fh.setFormatter(formatter)
+        my_logger.addHandler(fh)#对接起来 给日志收集器添加一个渠道
+        if level=='DEBUG':
+            my_logger.debug(msg)
+        elif level=='INFO':
+            my_logger.info(msg)
+        elif level=='WARNING':
+            my_logger.warning(msg)
+        elif level=='ERROR':
+            my_logger.error(msg)
+        elif level=='CRITICAL':
+            my_logger.critical(msg)
+        my_logger.removeHandler(fh)#渠道要记得移除掉 否则 日志输出会重复
+
+    def debug(self,msg):
+        self.my_log("DEBUG",msg)
+
+    def info(self,msg):
+        self.my_log("INFO",msg)
+
+    def warning(self,msg):
+        self.my_log("WARNING",msg)
+
+    def error(self,msg):
+        self.my_log("ERROR",msg)
+
+    def critical(self,msg):
+        self.my_log("CRITICAL",msg)
